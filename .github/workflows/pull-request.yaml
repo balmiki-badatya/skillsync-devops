@@ -1,0 +1,24 @@
+name: "Terraform PR validate workflow"
+
+on: 
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  format-and-validate:
+    name: "format and validate terraform code"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Clone code"
+        uses: actions/checkout@v5
+      - name: "Setup terraform"
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.7"
+      - name: "Terraform code format check"
+        run: |
+          terraform format -check -recursive
+      - name: "Terraform validate"
+        run: |
+          terraform validate -var-file ../../vars/ppe.tfvars

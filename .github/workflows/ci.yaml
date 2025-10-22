@@ -1,0 +1,26 @@
+name: "SkillSync infra deploy workflow"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  clone-and-validate:
+    name: "Clone and validate terraform"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "clone reposotory"
+        uses: actions/checkout@v5
+      - name: "Terraform format and validate"
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.7"
+      - name: "Terraform format check"
+        run: |
+          terraform fmt -check -recursive
+      - name: "Terraform validate"
+        run: |
+          terraform validate
+
+
