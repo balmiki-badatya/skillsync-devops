@@ -21,4 +21,4 @@ jobs:
           terraform fmt -check -recursive
       - name: "Terraform validate"
         run: |
-          terraform validate -var-file ../../vars/ppe.tfvars
+          terraform validate
