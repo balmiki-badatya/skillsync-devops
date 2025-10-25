@@ -27,23 +27,24 @@ jobs:
           role-to-assume: ${{ secrets.ASSUME_ROLE }}
       - name: Terraform format check
         run: |
-          aws sts get-caller-identity
+          set e+
           terraform fmt -check -recursive
           if [ $? -eq 0 ]; then
-            echo "Format check passed."
+            echo "✅ Format check passed."
           else
-            echo "Terraform code is not formated"
+            echo "❌ Terraform code is not formated"
           fi
         shell: bash  
       - name: Validate Terraform configs
         run:
+          set e+
           terraform validate -json > terraformValidation.json
           echo "check if terraform configuration is valid."
           isValid = jq '.valid' erraformValidation.json
           if [ $isValid == true ]; then
-            echo "Terraform config is valid."
+            echo "✅ Terraform config is valid."
           else
-            echo "Terraform validation failed."
+            echo "❌ Terraform validation failed."
           fi           
         shell: bash
           
