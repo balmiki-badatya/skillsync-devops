@@ -25,13 +25,11 @@ jobs:
         with:
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
           role-to-assume: ${{ secrets.ASSUME_ROLE }}
-      - name: Terraform code format check
-        run: |
-          terraform fmt -check -recursive
       - name: Terraform format check
         run: |
           aws sts get-caller-identity
-          if [ terraform fmt -check = 0 ]; then
+          terraform fmt -check -recursive
+          if [ $? -eq 0 ]; then
             echo "Format check passed."
           else
             echo "Terraform code is not formated"
@@ -41,8 +39,8 @@ jobs:
         run:
           terraform validate -json > terraformValidation.json
           echo "check if terraform configuration is valid."
-          isValidTerraformConfig = jq '.valid' erraformValidation.json
-          if [ $isValid -eq true ]; then
+          isValid = jq '.valid' erraformValidation.json
+          if [ $isValid == true ]; then
             echo "Terraform config is valid."
           else
             echo "Terraform validation failed."
