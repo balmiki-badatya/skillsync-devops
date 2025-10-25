@@ -28,7 +28,24 @@ jobs:
       - name: Terraform code format check
         run: |
           terraform fmt -check -recursive
-      - name: Terraform init
+      - name: Terraform format check
         run: |
           aws sts get-caller-identity
-          terraform int -backend-config=../../vars/ppe.backend.tfvars
+          if [ terraform fmt -check = 0 ]; then
+            echo "Format check passed."
+          else
+            echo "Terraform code is not formated"
+          fi
+        shell: bash  
+      - name: Validate Terraform configs
+        run:
+          terraform validate -json > terraformValidation.json
+          echo "check if terraform configuration is valid."
+          isValidTerraformConfig = jq '.valid' erraformValidation.json
+          if [ $isValid -eq true ]; then
+            echo "Terraform config is valid."
+          else
+            echo "Terraform validation failed."
+          fi           
+        shell: bash
+          
