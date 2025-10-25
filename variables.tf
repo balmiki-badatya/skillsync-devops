@@ -13,14 +13,12 @@ variable "created_by" {
   default     = "GitHub Actions"
 }
 
-variable "common_tags" {
-  type        = map(string)
-  description = "Default tags for aws resources"
-  default = {
-    "region"      = var.default_region,
-    "application" = var.account_name,
-    "created_by"  = var.created_by,
-    "managed_by"  = "Terraform"
+locals {
+  common_tags = {
+    region      = var.default_region,
+    application = var.account_name,
+    created_by  = var.created_by,
+    managed_by  = "Terraform"
   }
 }
 

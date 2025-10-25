@@ -1,24 +1,34 @@
-name: "Terraform PR validate workflow"
+name: Terraform PR validate workflow
 
-on: 
+'on':
   pull_request:
     branches:
       - main
 
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+
 jobs:
   format-and-validate:
-    name: "format and validate terraform code"
+    name: format and validate terraform code
     runs-on: ubuntu-latest
     steps:
-      - name: "Clone code"
+      - name: Clone code
         uses: actions/checkout@v5
-      - name: "Setup terraform"
+      - name: Setup terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: "1.5.7"
-      - name: "Terraform code format check"
+          terraform_version: 1.5.7
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.ASSUME_ROLE }}
+      - name: Terraform code format check
         run: |
           terraform fmt -check -recursive
-      - name: "Terraform validate"
+      - name: Terraform init
         run: |
-          terraform validate
+          aws sts get-caller-identity
+          terraform int -backend-config=../../vars/ppe.backend.tfvars
