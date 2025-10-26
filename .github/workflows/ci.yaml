@@ -16,6 +16,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v5.1.0
         with:
           region: ${{ secrets.AWS_DEFAULT_REGION }}
+          role-to-assume: ${{ secrets.ASSUME_ROLE }}
       - name: Terraform initialize
         run: |
           aws sts get-caller-identity             
