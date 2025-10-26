@@ -29,10 +29,14 @@ jobs:
           aws sts get-caller-identity
           terraform init -backend-config="vars/ppe.backend.tfvars"
       - name: Terraform plan
+        working-directory: .
         run: |
           terraform plan -var-file="vars/ppe.tfvars" -out=tfpaln
+          ls -lrt
       - name: Terraform apply
+        working-directory: .
         run: |
+          ls -lrt
           terraform apply -auto-approve tfplan   
            
 
