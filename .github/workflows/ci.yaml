@@ -20,6 +20,10 @@ jobs:
         with:
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
           role-to-assume: ${{ secrets.ASSUME_ROLE }}
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.7"
       - name: Terraform initialize
         run: |
           aws sts get-caller-identity
