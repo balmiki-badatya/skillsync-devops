@@ -47,9 +47,9 @@ jobs:
 
           isValid = jq '.valid' erraformValidation.json
 
-          echo Terraform is valid = $(isValid)
+          echo Terraform is valid = $isValid
 
-          if [ $(isValid) = "true" ]; then
+          if [ "$isValid" == "true" ]; then
             echo "✅ Terraform config is valid."
           else
             echo "❌ Terraform validation failed."
