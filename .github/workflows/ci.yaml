@@ -1,0 +1,31 @@
+name: "SkillSync infra deploy workflow"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  clone-and-validate:
+    name: "Clone repository, plan and apply  terraform"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "clone reposotory"
+        uses: actions/checkout@v5
+      - name: Authenticate with AWS OIDC
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+          region: ${{ secrets.AWS_DEFAULT_REGION }}
+          role-to-assume: ${{ secrets.ASSUME_ROLE }}
+      - name: Terraform initialize
+        run: |
+          aws sts get-caller-identity             
+
+          terraform init -backend-config="vars/ppe.backend.tfvars"
+      - name: Terraform plan
+        run: |
+          terraform plan -var-file="vars/ppe.backend.tfvars" -out=tfpaln
+      - name: Terraform apply
+        run: |
+          terraform apply -auto-approve tfplan    
+
