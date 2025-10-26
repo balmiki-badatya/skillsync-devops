@@ -45,11 +45,11 @@ jobs:
 
           echo "check if terraform configuration is valid."
 
-          isValid = jq '.valid' erraformValidation.json
+          isValid = $(jq '.valid' erraformValidation.json)
 
-          echo Terraform is valid = $(isValid)
+          echo Terraform is valid = $isValid
 
-          if [ "$isValid" == "true" ]; then
+          if [ $isValid = "true" ]; then
             echo "✅ Terraform config is valid."
             exit 0
           else
