@@ -50,7 +50,7 @@ jobs:
 
           echo "check if terraform configuration is valid."
 
-          isValid = $(jq '.valid' terraformValidation.json)
+          isValid=$(jq -r '.valid' terraformValidation.json)
 
           echo Terraform is valid = $isValid
 
