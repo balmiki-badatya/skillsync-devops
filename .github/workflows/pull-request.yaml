@@ -31,10 +31,13 @@ jobs:
           terraform fmt -check -recursive
           if [ $? -eq 0 ]; then
             echo "✅ Format check passed."
+            exit 0
           else
             echo "❌ Terraform code is not formated"
+            exit 1
           fi
         shell: bash  
+        continue-on-error: false
       - name: Validate Terraform configs
         run:
           set +e
