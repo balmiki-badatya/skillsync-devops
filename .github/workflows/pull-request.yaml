@@ -27,7 +27,7 @@ jobs:
           role-to-assume: ${{ secrets.ASSUME_ROLE }}
       - name: Terraform format check
         run: |
-          set e+
+          set +e
           terraform fmt -check -recursive
           if [ $? -eq 0 ]; then
             echo "✅ Format check passed."
@@ -37,7 +37,7 @@ jobs:
         shell: bash  
       - name: Validate Terraform configs
         run:
-          set e+
+          set +e
           terraform validate -json > terraformValidation.json
           echo "check if terraform configuration is valid."
           isValid = jq '.valid' erraformValidation.json
