@@ -11,10 +11,10 @@ permissions:
 
 jobs:
   format-and-validate:
-    name: format and validate terraform code
+    name: Validate terraform
     runs-on: ubuntu-latest
     steps:
-      - name: Clone code
+      - name: Clone repository
         uses: actions/checkout@v5
       - name: Setup terraform
         uses: hashicorp/setup-terraform@v3
@@ -45,7 +45,7 @@ jobs:
 
           echo "check if terraform configuration is valid."
 
-          isValid = $(jq '.valid' erraformValidation.json)
+          isValid = $(jq '.valid' terraformValidation.json)
 
           echo Terraform is valid = $isValid
 
