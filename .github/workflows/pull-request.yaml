@@ -37,14 +37,19 @@ jobs:
             exit 1
           fi
         shell: bash  
-        continue-on-error: false
       - name: Validate Terraform configs
         run:
           set +e
+
           terraform validate -json > terraformValidation.json
+
           echo "check if terraform configuration is valid."
+
           isValid = jq '.valid' erraformValidation.json
-          if [ $isValid == true ]; then
+
+          echo Terraform is valid = $isValid
+
+          if [ $isValid = "true" ]; then
             echo "✅ Terraform config is valid."
           else
             echo "❌ Terraform validation failed."
