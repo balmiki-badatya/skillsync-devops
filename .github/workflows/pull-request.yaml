@@ -52,8 +52,6 @@ jobs:
 
           isValid=$(jq -r '.valid' terraformValidation.json)
 
-          echo Terraform is valid = $isValid
-
           if [ "$isValid" = "true" ]; then
             echo "✅ Terraform config is valid."
             exit 0

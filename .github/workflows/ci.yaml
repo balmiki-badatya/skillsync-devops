@@ -7,20 +7,24 @@ on:
 
 jobs:
   clone-and-validate:
-    name: "Clone and validate terraform"
+    name: "Clone repository, plan and apply  terraform"
     runs-on: ubuntu-latest
     steps:
       - name: "clone reposotory"
         uses: actions/checkout@v5
-      - name: "Terraform format and validate"
-        uses: hashicorp/setup-terraform@v3
+      - name: Authenticate with AWS OIDC
+        uses: aws-actions/configure-aws-credentials@v5.1.0
         with:
-          terraform_version: "1.5.7"
-      - name: "Terraform format check"
+          region: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Terraform initialize
         run: |
-          terraform fmt -check -recursive
-      - name: "Terraform validate"
-        run: |
-          terraform validate
+          aws sts get-caller-identity             
 
+          terraform init -backend-config="vars/ppe.backend.tfvars"
+      - name: Terraform plan
+        run: |
+          terraform plan -var-file="vars/ppe.backend.tfvars" -out=tfpaln
+      - name: Terraform apply
+        run: |
+          terraform apply -auto-approve tfplan    
 
