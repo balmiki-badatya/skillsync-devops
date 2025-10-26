@@ -30,7 +30,7 @@ jobs:
           terraform init -backend-config="vars/ppe.backend.tfvars"
       - name: Terraform plan
         run: |
-          terraform plan -var-file="vars/ppe.backend.tfvars" -out=tfpaln
+          terraform plan -var-file="vars/ppe.tfvars" -out=tfpaln
       - name: Terraform apply
         run: |
           terraform apply -auto-approve tfplan   
