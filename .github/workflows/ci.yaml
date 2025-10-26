@@ -26,5 +26,6 @@ jobs:
           terraform plan -var-file="vars/ppe.backend.tfvars" -out=tfpaln
       - name: Terraform apply
         run: |
-          terraform apply -auto-approve tfplan    
+          terraform apply -auto-approve tfplan   
+           
 
