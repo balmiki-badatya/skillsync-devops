@@ -18,3 +18,14 @@ variable "vpc_cidr" {
   description = "VPC CIDR block"
   type        = string
 }
+
+variable "az_list" {
+  type        = set(string)
+  description = "Number of subnets to create under the VPC."
+}
+
+variable "env" {
+  type        = string
+  default     = "ppe"
+  description = "Environment name."
+}
