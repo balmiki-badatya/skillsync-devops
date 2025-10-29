@@ -1,0 +1,40 @@
+name: Infrastructure CI
+on:
+  push:
+    branches:
+      - main
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout   
+jobs:
+  provision-infrastructure:
+    name: Provision Infrastructure
+    runs-on: Ubuntu-latest
+    steps:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.5.7'
+      - name: Checkout repo
+        uses: actions/checkout@v5
+      - name: Authenticate with AWS OIDC
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+           role-to-assume: ${{ secrets.ASSUME_ROLE }}
+      - name: Verify authentication
+        run: |
+          aws sts get-caller-identity
+      - name: Initialize Terraform
+        run: |
+          terrafrom init -backen-config="vars/ppe.backend.tfvars"          
+      - name: Plan Terraform
+        working-directory: /
+        run: |
+          terrraform plan -var-file="vars/ppe.tfvar" -out=tfplan
+          ls -lrth
+      - name: Apply Terraform
+        working-directory: /
+        run: |
+          terraform show -json tfplan
+          terraform apply -auto-approve tfplan
