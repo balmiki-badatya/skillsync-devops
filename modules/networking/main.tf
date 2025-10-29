@@ -2,7 +2,7 @@ locals {
   az_count = length(var.az_lists)
 
   private_subnet_cidr = [for index in range(local.az_count) : cidrsubnet(aws_vpc.skillsync_vpc.cidr_block, 4, index)]
-  public_subnet_cidr  = [for idx in range(local.az_count) : cidrsubnet(aws_vpc.skillsync_vpc.cidr_block, 6, idx)]
+  public_subnet_cidr  = [for idx in range(local.az_count) : cidrsubnet(aws_vpc.skillsync_vpc.cidr_block, 6, (local.az_count + idx))]
 }
 
 resource "aws_vpc" "skillsync_vpc" {
