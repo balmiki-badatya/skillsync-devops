@@ -20,7 +20,7 @@ variable "vpc_cidr" {
 }
 
 variable "az_list" {
-  type        = set(string)
+  type        = list(string)
   description = "Number of subnets to create under the VPC."
 }
 
