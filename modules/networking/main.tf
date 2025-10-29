@@ -14,12 +14,12 @@ resource "aws_vpc" "skillsync_vpc" {
 }
 
 resource "aws_subnet" "private_subnets" {
-  count             = length(var.az_list)
+  for_each          = var.az_list
   vpc_id            = aws_vpc.skillsync_vpc.id
-  cidr_block        = cidrsubnet(aws_vpc.skillsync_vpc.cidr_block, 4, count.index)
-  availability_zone = var.az_list[count.index]
+  cidr_block        = cidrsubnet(aws_vpc.skillsync_vpc.cidr_block, 4, index(each.key))
+  availability_zone = each.key
   tags = merge({
-    Name = "${var.env}-private-subnet-${count.index + 1}"
+    Name = "${var.env}-private-subnet-${each.key}"
     },
     var.default_tags
   )
