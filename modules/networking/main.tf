@@ -38,10 +38,11 @@ resource "aws_subnet" "private-subnets" {
 }
 
 resource "aws_subnet" "public-subnets" {
-  count             = local.az_count
-  vpc_id            = aws_vpc.skillsync-vpc.id
-  cidr_block        = local.public_subnet_cidr[count.index]
-  availability_zone = var.az_lists[count.index]
+  count                   = local.az_count
+  vpc_id                  = aws_vpc.skillsync-vpc.id
+  cidr_block              = local.public_subnet_cidr[count.index]
+  availability_zone       = var.az_lists[count.index]
+  map_public_ip_on_launch = true
   tags = merge({
     Name = "${var.env}-public-subnet-${count.index + 1}"
     },
