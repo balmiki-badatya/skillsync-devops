@@ -6,7 +6,7 @@ locals {
   default_routes = {
     "internet_ipv4"        = "0.0.0.0/0",
     "internet_egress_only" = "::/0",
-    "vpc_route"            = aws_vpc.skillsync_vpc.cidr_block
+    "vpc_route"            = aws_vpc.skillsync-vpc.cidr_block
   }
 }
 
