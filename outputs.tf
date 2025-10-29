@@ -30,3 +30,13 @@ output "private_route_table_id" {
   description = "Private route table id"
   value       = module.networking.private-route-table-id
 }
+
+output "elasic_ip_id" {
+  description = "Elastic IP id"
+  value       = module.networking.elatic-ip-id
+}
+
+output "nat-gateway-id" {
+  description = "NAT Gateway id"
+  value       = module.networking.nat-gateway-id
+}

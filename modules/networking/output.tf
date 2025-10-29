@@ -28,3 +28,13 @@ output "private-route-table-id" {
   description = "Private route table id"
   value       = aws_route_table.private-route-table.id
 }
+
+output "elatic-ip-id" {
+  description = "Elastic Ip id"
+  value       = aws_eip.eip.id
+}
+
+output "nat-gateway-id" {
+  description = "NAT Gateway id"
+  value       = aws_nat_gateway.ngw.id
+}
