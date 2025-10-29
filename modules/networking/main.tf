@@ -82,14 +82,14 @@ resource "aws_route" "public-internet-ipv4-route" {
 ################################################################################################
 ######################################## Internet config for private ###########################
 resource "aws_nat_gateway" "ngw" {
-  subnet_id = aws_subnet.public-subnets[0].id
+  subnet_id         = aws_subnet.public-subnets[0].id
+  allocation_id     = aws_eip.eip.id
+  connectivity_type = "public"
   tags = merge({
     Name = "${var.env}-ngw"
   }, var.default_tags)
 
-  # To ensure proper ordering, it is recommended to add an explicit dependency
-  # on the Internet Gateway for the VPC.
-  depends_on = [aws_internet_gateway.igw]
+  depends_on = [aws_internet_gateway.igw, aws_eip.eip]
 
 }
 
@@ -100,11 +100,6 @@ resource "aws_eip" "eip" {
     },
     var.default_tags
   )
-}
-
-resource "aws_nat_gateway_eip_association" "nat-eip-association" {
-  allocation_id  = aws_eip.eip.id
-  nat_gateway_id = aws_nat_gateway.ngw.id
 }
 
 resource "aws_route_table" "private-route-table" {
