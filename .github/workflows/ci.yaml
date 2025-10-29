@@ -44,6 +44,7 @@ jobs:
         if: ${{ inputs.operation == 'apply' }} 
         run: |
           terraform apply -auto-approve tfplan
+          terraform show -json tfplan          
       - name: Terraform destroy
         if: ${{ inputs.operation == 'destroy' }} 
         run: |

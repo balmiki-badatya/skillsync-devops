@@ -19,7 +19,7 @@ resource "aws_subnet" "private_subnets" {
   cidr_block        = cidrsubnet(aws_vpc.skillsync_vpc.cidr_block, 4, count.index)
   availability_zone = count.index
   tags = merge({
-    Name = concat("${var.env}-private-subnet-", count.index)
+    Name = concat("private-subnet-", count.index)
     },
     var.default_tags
   )
