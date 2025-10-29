@@ -8,5 +8,6 @@ module "networking" {
   vpc_name       = var.vpc_name
   default_region = var.default_region
   default_tags   = local.common_tags
-  az_list        = toset(data.aws_availability_zones.available_az.names)
+  az_list        = data.aws_availability_zones.available_az.names
+
 }
