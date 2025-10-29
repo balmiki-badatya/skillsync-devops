@@ -1,4 +1,4 @@
-name: "SkillSync infra deploy workflow"
+name: "Manual infra action"
 
 on:
 # push:
@@ -12,6 +12,8 @@ on:
         options:
           - apply
           - destroy
+        default: apply
+        required: true  
 permissions:
   id-token: write      
 
@@ -38,6 +40,7 @@ jobs:
       - name: Terraform plan
         working-directory: .
         run: |
+          echo ${{ github.event.inputs.operation }}
           terraform plan -var-file="vars/ppe.tfvars" -out=tfplan
       - name: Terraform apply
         working-directory: .
