@@ -22,7 +22,7 @@ resource "aws_subnet" "private_subnets" {
   count             = local.az_count
   vpc_id            = aws_vpc.skillsync_vpc.id
   cidr_block        = local.private_subnet_cidr[count.index]
-  availability_zone = each.key
+  availability_zone = var.az_lists[count.index]
   tags = merge({
     Name = "${var.env}-private-subnet-${count.index + 1}"
     },
