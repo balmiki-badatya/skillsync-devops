@@ -1,7 +1,7 @@
 locals {
   az_count = length(var.az_lists)
 
-  private_subnet_cidr = [for index in range(locals.az_count) : cidrsubnet(aws_vpc.skillsync_vpc.cidr_block, 4, index)]
+  private_subnet_cidr = [for index in range(local.az_count) : cidrsubnet(aws_vpc.skillsync_vpc.cidr_block, 4, index)]
 }
 resource "aws_vpc" "skillsync_vpc" {
   cidr_block           = var.vpc_cidr
