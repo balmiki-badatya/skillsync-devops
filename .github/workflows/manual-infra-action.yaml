@@ -42,12 +42,12 @@ jobs:
         run: |
           operation=${{ github.event.inputs.operation }}
           echo $operation
-          if[ $operation='destroy' ]; then
+          if [ "$operation" = "destroy" ]; then
             terraform plan -destroy -var-file="vars/ppe.tfvars" -out=tfplan-destroy
           else
             terraform plan -var-file="vars/ppe.tfvars" -out=tfplan
           fi
-          
+        shell: bash  
       - name: Terraform apply
         working-directory: .
         if: ${{ inputs.operation == 'apply' }} 
