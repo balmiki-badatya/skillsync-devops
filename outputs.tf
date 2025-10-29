@@ -33,10 +33,10 @@ output "private_route_table_id" {
 
 output "elasic_ip_id" {
   description = "Elastic IP id"
-  value       = module.elasic_ip_id
+  value       = module.networking.elatic-ip-id
 }
 
 output "nat-gateway-id" {
   description = "NAT Gateway id"
-  value       = module.nat_gateway_id
+  value       = module.networking.nat-gateway-id
 }
