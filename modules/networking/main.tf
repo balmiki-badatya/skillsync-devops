@@ -95,7 +95,7 @@ resource "aws_nat_gateway" "ngw" {
 resource "aws_eip" "eip" {
   domain = "vpc"
   tags = merge({
-    Name = "${var-env}-eip"
+    Name = "${var.env}-eip"
     },
     var.default_tags
   )
