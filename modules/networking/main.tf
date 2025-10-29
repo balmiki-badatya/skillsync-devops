@@ -67,6 +67,11 @@ resource "aws_route_table" "public-route-table" {
   )
 }
 
+resource "aws_route_table_association" "public-subnet-association" {
+  subnet_id      = aws_subnet.public-subnets[*].id
+  route_table_id = aws_route_table.public-route-table.id
+}
+
 resource "aws_route" "public-internet-ipv4-route" {
   route_table_id         = aws_route_table.public-route-table.id
   destination_cidr_block = lookup(local.default_routes, "internet_ipv4", "")
@@ -75,18 +80,31 @@ resource "aws_route" "public-internet-ipv4-route" {
 
 ################################################################################################
 ######################################## Internet config for private ###########################
-# resource "aws_nat_gateway" "example" {
-#   subnet_id     = aws_subnet.public-subnets[0].id
-#   tags = merge({
-#     Name = "${var.env}-ngw"
-#   }, var.default_tags)
+resource "aws_nat_gateway" "ngw" {
+  subnet_id = aws_subnet.public-subnets[0].id
+  tags = merge({
+    Name = "${var.env}-ngw"
+  }, var.default_tags)
 
-#   # To ensure proper ordering, it is recommended to add an explicit dependency
-#   # on the Internet Gateway for the VPC.
-#   depends_on = [aws_internet_gateway.igw]
-# }
+  # To ensure proper ordering, it is recommended to add an explicit dependency
+  # on the Internet Gateway for the VPC.
+  depends_on = [aws_internet_gateway.igw]
 
+}
 
+resource "aws_eip" "eip" {
+  domain = "vpc"
+  tags = merge({
+    Name = "${var-env}-eip"
+    },
+    var.default_tags
+  )
+}
+
+resource "aws_nat_gateway_eip_association" "nat-eip-association" {
+  allocation_id  = aws_eip.eip.id
+  nat_gateway_id = aws_nat_gateway.ngw.id
+}
 
 resource "aws_route_table" "private-route-table" {
   vpc_id = aws_vpc.skillsync-vpc.id
@@ -96,10 +114,14 @@ resource "aws_route_table" "private-route-table" {
   }, var.default_tags)
 }
 
+resource "aws_route_table_association" "private-subnet-association" {
+  subnet_id      = aws_subnet.private-subnets[*].id
+  route_table_id = aws_route_table.private-route-table.id
+}
 
-# resource "aws_route" "vpc-private-route" {
-#   route_table_id            = aws_route_table.private-route-table.id
-#   destination_cidr_block    = lookup(local.default_routes, "vpc_route", var.vpc_cidr)
-
-# }
+resource "aws_route" "vpc-private-route" {
+  route_table_id         = aws_route_table.private-route-table.id
+  destination_cidr_block = lookup(local.default_routes, "internet_ipv4", var.vpc_cidr)
+  nat_gateway_id         = aws_nat_gateway.ngw.id
+}
 
