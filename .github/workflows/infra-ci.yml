@@ -27,7 +27,7 @@ jobs:
           aws sts get-caller-identity
       - name: Initialize Terraform
         run: |
-          terraform init -backen-config="vars/ppe.backend.tfvars"          
+          terraform init -backend-config="vars/ppe.backend.tfvars"          
       - name: Plan Terraform
         working-directory: /
         run: |
