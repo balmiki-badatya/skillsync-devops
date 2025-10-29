@@ -48,6 +48,8 @@ jobs:
       - name: Terraform destroy
         if: ${{ inputs.operation == 'destroy' }} 
         run: |
-          terraform destroy -auto-approve
+          terraform plan -destroy -var-file="vars/ppe.tfvars" -out=tfplan-destroy
+          terraform show -json tfplan-json
+          terraform destroy -auto-approve -var-file="vars/ppe.tfvars"
            
 
