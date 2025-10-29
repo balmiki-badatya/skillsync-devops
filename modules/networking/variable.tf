@@ -19,13 +19,13 @@ variable "vpc_cidr" {
   type        = string
 }
 
-variable "az_list" {
-  type        = list(string)
-  description = "Number of subnets to create under the VPC."
-}
-
 variable "env" {
   type        = string
   default     = "ppe"
   description = "Environment name."
+}
+
+variable "az_lists" {
+  type        = list(string)
+  description = "AZ lists under the rezion."
 }

@@ -1,3 +1,8 @@
+locals {
+  az_count = length(var.az_lists)
+
+  private_subnet_cidr = [for index in range(local.az_count) : cidrsubnet(aws_vpc.skillsync_vpc.cidr_block, 4, index)]
+}
 resource "aws_vpc" "skillsync_vpc" {
   cidr_block           = var.vpc_cidr
   instance_tenancy     = "default"
@@ -14,12 +19,12 @@ resource "aws_vpc" "skillsync_vpc" {
 }
 
 resource "aws_subnet" "private_subnets" {
-  for_each          = var.az_list
+  count             = local.az_count
   vpc_id            = aws_vpc.skillsync_vpc.id
-  cidr_block        = cidrsubnet(aws_vpc.skillsync_vpc.cidr_block, 4, index(var.az_list, each.key))
-  availability_zone = each.key
+  cidr_block        = local.private_subnet_cidr[count.index]
+  availability_zone = var.az_lists[count.index]
   tags = merge({
-    Name = "${var.env}-private-subnet-${index(var.az_list, each.key)}"
+    Name = "${var.env}-private-subnet-${count.index + 1}"
     },
     var.default_tags
   )
