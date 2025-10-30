@@ -19,9 +19,9 @@ variable "sonar_instance_type" {
   description = "SonarQube Iinstance type"
 }
 
-variable "sonar_sg_id_list" {
-  type        = list(any)
-  description = "Security group Id's to attach to SONAR server."
+variable "sonar_sg_id_list"{
+    type = list
+    description = "Security group Id's to attach to SONAR server."
 
 }
 
@@ -57,6 +57,11 @@ variable "bastion_subnet_id" {
 variable "bastion_host_instance_type" {
   type        = string
   description = "bastion host instance type"
+}
+
+variable "bastion_sg_id_list"{
+    type = list(string)
+    description = "Bastion host security group id's"
 }
 
 
