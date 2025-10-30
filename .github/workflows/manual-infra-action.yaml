@@ -57,5 +57,12 @@ jobs:
         run: |
           terraform show -json tfplan-destroy
           terraform destroy -auto-approve -var-file="vars/dev/dev.tfvars"
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: tf-artifacts
+          path: |
+            tfplan*
+            *.pem
            
 
