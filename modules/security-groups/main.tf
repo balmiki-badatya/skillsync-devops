@@ -1,16 +1,12 @@
 resource "aws_security_group" "sonar_sg" {
   name        = "${var.env}-sonar-sg"
   description = "Security group for sonar host"
+  vpc_id      = lookup(var.vpc_details, "vpc_id", null)
   tags = merge({
     Name = "${var.env}-sonar-sg"
     },
     var.default_tags
   )
-}
-
-resource "aws_vpc_security_group_vpc_association" "example" {
-  security_group_id = aws_security_group.sonar_sg.id
-  vpc_id            = lookup(var.vpc_details, "vpc_id", null)
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh_inside_vpc" {
@@ -43,18 +39,13 @@ resource "aws_vpc_security_group_egress_rule" "default_egress" {
 resource "aws_security_group" "bastion_sg" {
   name        = "${var.env}-bastion-sg"
   description = "Security group for bastion host"
+  vpc_id      = lookup(var.vpc_details, "vpc_id", null)
   tags = merge({
     Name = "${var.env}-bastion-sg"
     },
     var.default_tags
   )
 }
-
-resource "aws_vpc_security_group_vpc_association" "bastion_sg_vpc_association" {
-  security_group_id = aws_security_group.bastion_sg.id
-  vpc_id            = lookup(var.vpc_details, "vpc_id", null)
-}
-
 
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   for_each          = var.ssh_ipv4_set
