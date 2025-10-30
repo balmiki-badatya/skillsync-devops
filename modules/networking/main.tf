@@ -72,6 +72,7 @@ resource "aws_route_table_association" "public-subnet-association" {
   for_each       = toset(aws_subnet.public-subnets[*].id)
   subnet_id      = each.value
   route_table_id = aws_route_table.public-route-table.id
+  depends_on     = [aws_subnet.public-subnets]
 }
 
 resource "aws_route" "public-internet-ipv4-route" {
@@ -115,6 +116,7 @@ resource "aws_route_table_association" "private-subnet-association" {
   for_each       = toset(aws_subnet.private-subnets[*].id)
   subnet_id      = each.value
   route_table_id = aws_route_table.private-route-table.id
+  depends_on     = [aws_subnet.private-subnets]
 }
 
 resource "aws_route" "vpc-private-route" {
