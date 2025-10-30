@@ -29,17 +29,11 @@ data "aws_ami" "default_ami" {
 }
 
 data "aws_subnet" "default_private_subnet" {
-  filter {
-    name   = "tag:Name"
-    values = ["ppe-private-subnet-1"]
-  }
+  id = "subnet-0dd64dfa23b1ee2ab"
 }
 
 data "aws_subnet" "default_public_subnet" {
-  filter {
-    name   = "Name"
-    values = ["ppe-public-subnet-2"]
-  }
+  id = "subnet-0523f968e75c2d3fd"
 }
 
 
