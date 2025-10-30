@@ -30,14 +30,14 @@ data "aws_ami" "default_ami" {
 
 data "aws_subnet" "default_private_subnet" {
   filter {
-    name   = "tag:Name"
+    name   = "tag:name"
     values = ["ppe-private-subnet-1"]
   }
 }
 
 data "aws_subnet" "default_public_subnet" {
   filter {
-    name   = "tag:Name"
+    name   = "name"
     values = ["ppe-public-subnet-2"]
   }
 }
