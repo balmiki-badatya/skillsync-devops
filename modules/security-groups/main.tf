@@ -61,7 +61,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   security_group_id = aws_security_group.bastion_sg.id
   cidr_ipv4         = each.key
   from_port         = lookup(var.port_map, "ssh", 22)
-  ip_protocol       = ssh
+  ip_protocol       = "ssh"
   to_port           = lookup(var.port_map, "ssh", 22)
   depends_on        = [aws_security_group.bastion_sg]
 }
