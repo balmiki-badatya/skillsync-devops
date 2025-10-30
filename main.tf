@@ -27,9 +27,9 @@ module "ec2" {
   subnet_id                  = module.networking.private-subnet-ids[0]
   domain_name                = var.domain_name
   sonar_instance_type        = var.sonar_instance_type
-  sonar_sg_id_list           = tolist(module.security_groups.sonar_sg_id)
+  sonar_sg_id_list           = [module.security_groups.sonar_sg_id]
   bastion_ami_id             = var.bastion_ami_id
   bastion_subnet_id          = module.networking.public-subnet-ids[1]
   bastion_host_instance_type = var.bastion_instance_type
-  bastion_sg_id_list         = tolist(module.security_groups.bastion_host_sg_id)
+  bastion_sg_id_list         = [module.security_groups.bastion_host_sg_id]
 }
