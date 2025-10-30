@@ -51,7 +51,7 @@ resource "aws_key_pair" "sonar_pem" {
 
 resource "local_file" "sonar_key_pem" {
   content  = tls_private_key.sonar_key.private_key_openssh
-  filename = "${path.module}/sonar_key.pem"
+  filename = "${path.root}/sonar_key.pem"
 }
 
 
@@ -61,7 +61,7 @@ resource "aws_instance" "sonar" {
   subnet_id              = local.subnet_id
   key_name               = aws_key_pair.sonar_pem.key_name
   vpc_security_group_ids = var.sonar_sg_id_list
-  user_data              = file("user-data-scripts/sonar.sh")
+  user_data              = file("${path.module}/user-data-scripts/sonar.sh")
   tags = merge({
     Name = "${var.domain_name}-SonaQube-server"
     },
@@ -82,7 +82,7 @@ resource "aws_key_pair" "bastion_host" {
 
 resource "local_file" "bastion_host_key_pem" {
   content  = tls_private_key.bastion_host_key.private_key_openssh
-  filename = "${path.module}/bastion_host_key.pem"
+  filename = "${path.root}/bastion_host_key.pem"
 }
 
 resource "aws_instance" "bastion_host" {
