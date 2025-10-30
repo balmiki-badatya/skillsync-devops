@@ -1,0 +1,10 @@
+vpc_cidr              = "10.0.0.0/16"
+default_region        = "us-west-1"
+vpc_name              = "skillsync-vpc"
+environment           = "dev"
+sonar_ami             = "ami-0e6be795b21969e1d"
+domain_name           = "skillsync"
+sonar_instance_type   = "t2.large"
+bastion_ami_id        = "ami-0e6be795b21969e1d"
+bastion_instance_type = "t2.micro"
+bastion_host_ssh_ips  = ["68.104.188.65/32"]

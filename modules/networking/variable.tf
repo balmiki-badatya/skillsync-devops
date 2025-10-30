@@ -21,7 +21,6 @@ variable "vpc_cidr" {
 
 variable "env" {
   type        = string
-  default     = "ppe"
   description = "Environment name."
 }
 
