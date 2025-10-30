@@ -2,7 +2,7 @@ output "vpc-details" {
   description = "AWS vpc id"
   value = {
     vpc_id   = aws_vpc.skillsync-vpc.id,
-    vpc_cidr = aws_vpc.skillsync-vpc.cidr_block.vpc_cidr
+    vpc_cidr = aws_vpc.skillsync-vpc.cidr_block
   }
 }
 

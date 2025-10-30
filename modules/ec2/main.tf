@@ -2,9 +2,9 @@ locals {
   default_ami              = data.aws_ami.default_ami.id
   sonar_ami_id             = var.sonar_ami != null ? var.sonar_ami : local.default_ami
   sonar_instance_type      = var.sonar_instance_type != null ? var.sonar_instance_type : lookup(var.default_instance_type_map, "sonar", null)
-  subnet_id                = var.subnet_id != null ? var.subnet_id : data.aws_subnets.default_private_subnet.id
+  subnet_id                = var.subnet_id != null ? var.subnet_id : data.aws_subnet.default_private_subnet.id
   bastion_ami_id           = var.bastion_ami_id != null ? var.bastion_ami_id : local.default_ami
-  public_bastion_subnet_id = var.bastion_subnet_id != null ? var_public_subnet_id : data.aws_subnet.default_public_subnet.id
+  public_bastion_subnet_id = var.bastion_subnet_id != null ? var.bastion_subnet_id : data.aws_subnet.default_public_subnet.id
   bastion_instance_type    = var.bastion_host_instance_type != null ? var.bastion_host_instance_type : lookup(var.default_instance_type_map, "bastion", null)
 }
 
