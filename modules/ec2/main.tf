@@ -61,6 +61,7 @@ resource "aws_instance" "sonar" {
   subnet_id              = local.subnet_id
   key_name               = aws_key_pair.sonar_pem.key_name
   vpc_security_group_ids = var.sonar_sg_id_list
+  user_data              = file("user-data-scripts/sonar.sh")
   tags = merge({
     Name = "${var.domain_name}-SonaQube-server"
     },
