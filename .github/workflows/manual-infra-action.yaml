@@ -33,16 +33,16 @@ jobs:
       - name: Terraform initialize
         run: |
           aws sts get-caller-identity
-          terraform init -backend-config="vars/ppe.backend.tfvars"
+          terraform init -backend-config="vars/dev/ppe.backend.tfvars"
       - name: Terraform plan
         working-directory: .
         run: |
           operation=${{ github.event.inputs.operation }}
           echo $operation
           if [ "$operation" = "destroy" ]; then
-            terraform plan -destroy -var-file="vars/ppe.tfvars" -out=tfplan-destroy
+            terraform plan -destroy -var-file="vars/dev/ppe.tfvars" -out=tfplan-destroy
           else
-            terraform plan -var-file="vars/ppe.tfvars" -out=tfplan
+            terraform plan -var-file="vars/dev/ppe.tfvars" -out=tfplan
           fi
         shell: bash  
       - name: Terraform apply
@@ -56,6 +56,6 @@ jobs:
         if: ${{ inputs.operation == 'destroy' }} 
         run: |
           terraform show -json tfplan-destroy
-          terraform destroy -auto-approve -var-file="vars/ppe.tfvars"
+          terraform destroy -auto-approve -var-file="vars/dev/ppe.tfvars"
            
 

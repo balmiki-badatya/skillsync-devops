@@ -28,11 +28,11 @@ jobs:
       - name: Initialize Terraform
         working-directory: .
         run: |
-          terraform init -backend-config="vars/ppe.backend.tfvars"          
+          terraform init -backend-config="vars/dev/ppe.backend.tfvars"          
       - name: Plan Terraform
         working-directory: .
         run: |
-          terraform plan -var-file="vars/ppe.tfvars" -out=tfplan
+          terraform plan -var-file="vars/dev/ppe.tfvars" -out=tfplan
           ls -lrth
       - name: Apply Terraform
         working-directory: .

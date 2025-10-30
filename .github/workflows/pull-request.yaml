@@ -39,7 +39,7 @@ jobs:
         shell: bash  
       - name: Terraform intialize
         run: |
-          terraform init -backend-config="vars/ppe.backend.tfvars"        
+          terraform init -backend-config="vars/dev/ppe.backend.tfvars"        
       - name: Validate Terraform configs
         run: |
           set +e

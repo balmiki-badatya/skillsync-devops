@@ -1,7 +1,9 @@
-output "vpc-id" {
+output "vpc-details" {
   description = "AWS vpc id"
-  value       = aws_vpc.skillsync-vpc.id
-  depends_on  = [aws_vpc.skillsync-vpc]
+  value = {
+    vpc_id   = aws_vpc.skillsync-vpc.id,
+    vpc_cidr = aws_vpc.skillsync-vpc.cidr_block.vpc_cidr
+  }
 }
 
 output "private-subnet-ids" {
