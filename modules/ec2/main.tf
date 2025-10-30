@@ -13,7 +13,7 @@ data "aws_ami" "default_ami" {
 
   filter {
     name   = "name"
-    values = ["Amazon Linux 2023 kernel-6.1 AMI"]
+    values = ["al2023-ami-2023.*-kernel-6.*-x86_64"]
   }
 
   filter {
@@ -24,6 +24,8 @@ data "aws_ami" "default_ami" {
     name   = "architecture"
     values = ["x86_64"]
   }
+  owners = ["amazon"]
+
 }
 
 data "aws_subnet" "default_private_subnet" {
