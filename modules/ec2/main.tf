@@ -1,5 +1,4 @@
 locals {
-  default_ami              = data.aws_ami.default_ami.id
   sonar_ami_id             = var.sonar_ami
   sonar_instance_type      = var.sonar_instance_type != null ? var.sonar_instance_type : lookup(var.default_instance_type_map, "sonar", null)
   subnet_id                = var.subnet_id
