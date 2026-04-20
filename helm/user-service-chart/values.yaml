@@ -1,0 +1,67 @@
+replicaCount: 1
+image:
+  repository: 676726973076.dkr.ecr.us-west-1.amazonaws.com/user-service
+  pullPolicy: Always
+  tag: "v10"
+serviceAccount:
+  create: false
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  name: ""
+
+env: dev
+namespace: api-svc
+
+podAnnotations: 
+  alb.ingress.kubernetes.io/healthcheck-path: /user-service/actuator/health
+podLabels: {}
+
+serviceAccountAnnotations:
+  kubernetes.io/enforce-mountable-secrets: "true"
+serviceAccountName: user-service-sa  
+
+
+service:
+  type: NodePort
+  port: 9090
+
+resources: 
+  limits:
+    cpu: "0.2"
+    memory: 512Mi
+  requests:
+    cpu: "0.2"
+    memory: 512Mi
+
+# This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+livenessProbe:
+  httpGet:
+    path: /user-service/actuator/health
+    port: http
+  initialDelaySeconds: 120
+  periodSeconds: 20
+  failureThreshold: 30
+readinessProbe:
+  httpGet:
+    path: /user-service/actuator/health
+    port: http
+  initialDelaySeconds: 120
+  periodSeconds: 20
+  failureThreshold: 30
+
+terminationGracePeriodSeconds: 60
+
+
+# This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 75
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
