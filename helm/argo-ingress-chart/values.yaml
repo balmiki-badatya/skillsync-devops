@@ -1,0 +1,36 @@
+
+serviceAccount:
+  create: true  
+  automount: true  
+  annotations: {}
+  name: "argo-cd-ingress-sa"
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: "alb"
+  annotations: 
+    alb.ingress.kubernetes.io/load-balancer-name: dev-arg-cd-lb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '20'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '10'
+    alb.ingress.kubernetes.io/healthy-threshold-count	: '2'
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/success-codes: 200,302,307
+    alb.ingress.kubernetes.io/healthcheck-path: /
+  http:
+    - paths:
+        - path: /
+          pathType: Prefix
+          serviceName: dev-argo-cd-argocd-server
+          port: 80          
+
+  
