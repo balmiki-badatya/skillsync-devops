@@ -1,4 +1,4 @@
-name: "Boostrap argocd"
+name: "Boostrap kubernetes"
 
 on:
   workflow_dispatch:
