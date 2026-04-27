@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-chart
+  labels:
+    app.kubernetes.io/component: {{ .Values.deploymenLabels.type }}
+    environment: {{ .Values.deploymenLabels.environment }}
+    app.kubernetes.io/version: {{ .Chart.ApiVersion }}
+    app.kubernetes.io/managed-by: {{ .Values.deploymenLabels.managedBy }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- with .Values.podLabels }}
+        {{- toYaml . | nintend 6 }}
+      {{- end }}
+  template:
+    metadata:
+      labels:
+        {{- with .Values.podLabels}}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.serviceAccount.create }}
+        serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{- end }}  
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
+            periodSeconds: {{ .Values.periodSeconds }}
+            timeoutSeconds: {{ .Values.timeoutSeconds }}
+            failureThreshold: {{ .Values.failureThreshold }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
+            periodSeconds: {{ .Values.periodSeconds }}
+            timeoutSeconds: {{ .Values.timeoutSeconds }}
+            failureThreshold: {{ .Values.failureThreshold }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          
