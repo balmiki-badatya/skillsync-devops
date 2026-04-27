@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: user-service-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/balmiki-badatya/skillsync-devops.git
+    targetRevision: HEAD
+    path: helm/charts/api-svc-chart
+    helm:
+      releaseName: user-service
+      namespace: api-svc
+      valueFiles:
+        - helm/config/api-svc/user-service/values-dev.yaml
+  destination:
+    name: microops-eks-cluster
+    namespace: api-svc
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

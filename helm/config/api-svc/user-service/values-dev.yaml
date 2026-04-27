@@ -1,0 +1,55 @@
+replicaCount: 1
+
+image:
+  repository: "676726973076.dkr.ecr.us-west-1.amazonaws.com/user-service"
+  pullPolicy: Always
+  tag: "9f61a73885430a3a7d63b57a17d46cc59d0b3560"
+
+serviceAccount:
+  create: true
+  automount: false
+  name: "api-svc-sa"
+
+podLabels:
+  type: backend-api
+
+deploymentLabels:
+  type: backend-api
+  environment: dev
+  managedBy: helm
+
+service:
+  type: NodePort
+  port: 9090
+  labels:
+    alb.ingress.kubernetes.io/healthcheck-path: /user-service/actuator/health
+
+resources: 
+  requests:
+    cpu: "0.5"
+    memory: "512Mi"
+  limits:
+    cpu: "0.5"
+    memory: "512Mi"
+
+livenessProbe:
+  httpGet:
+    path: /user-service/actuator/health
+    port: http    
+readinessProbe:
+  httpGet:
+    path: /user-service/actuator/health
+    port: http
+initialDelaySeconds: 120
+periodSeconds: 20
+timeoutSeconds: 3
+failureThreshold: 3
+
+
+# This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80

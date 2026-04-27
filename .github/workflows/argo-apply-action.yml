@@ -1,0 +1,30 @@
+name: Argo apply action
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  applyAgroApplication:
+    name: Apply argo application
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v5
+      - name: Authenticate with AWS
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          role-to-assume: ${{ secrets.ASSUME_ROLE }}
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig \
+          --name ${{ secrets.EKS_CLUSTER_NAME }} \        
+          --region us-west-1
+      - name: Apply argo applications
+        run: |
+          kubectl apply -f argo-applications
+

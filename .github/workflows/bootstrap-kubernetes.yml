@@ -1,0 +1,42 @@
+name: "Boostrap argocd"
+
+on:
+  workflow_dispatch:
+    
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  bootstrap:
+    name: bootstrap kubernetes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v5
+      - name: Authenticate with AWS
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          role-to-assume: ${{ secrets.ASSUME_ROLE }}
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig \
+          --name ${{ secrets.EKS_CLUSTER_NAME }} \        
+          --region us-west-1
+      - name: Create NS,SA, pod Identity association for pod
+        run: |
+          kubctl create namespace api-svc
+          
+          kubectl create serviceaccount api-svc-sa --namespace api-svc
+
+          aws eks create-pod-identity-association \
+          --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
+          --namespace api-svc \
+          --service-account api-svc-sa \
+          --role-arn ${{ secrets.POD_IDENTITY_ASSOCIATION_SECRETS_MANAGER_ROLE }}
+
+
+
+                 
+  
